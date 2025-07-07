@@ -1,7 +1,7 @@
 
 import './App.css'
 import Content from './components/Content'
-import FormGet from './components/Form/FormGet'
+import FormPost from './components/Form/FormPost'
 
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className='main'>
-      <FormGet></FormGet>
+      <FormPost></FormPost>
       <Content></Content>
     </div>
   )

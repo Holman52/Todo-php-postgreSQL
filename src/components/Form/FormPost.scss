@@ -44,30 +44,32 @@ box-shadow: 1px -3px 29px -6px rgba(0, 0, 0, 0.2) inset;
 }
 
 .form-content.open {
-  max-height:200px; /* Подберите подходящее значение */
+  max-height:300px; /* Подберите подходящее значение */
   padding: 15px 30px;
   border: 1px solid #f0f0f0;
   
   border-radius: 0 0 5px 5px;
 }
 
-.form-get__header-block {
+.form-post__header-block {
   margin-bottom: 15px;
 }
 
-.form-get__header-block__label {
+.form-post__header-block__label {
   display: block;
   margin-bottom: 5px;
   font-size: 1.2rem;
 }
 
-.form-get__header-block__input {
+.form-post__header-block__input {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  position: relative;
-  outline: none;
 }
 
+.form-post__header-block__input-num{
+  max-width: 50px;
+}
+.form-post__button{
+  display: flex;
+  justify-content: end;
+  align-items: end;
+}
