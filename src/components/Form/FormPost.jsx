@@ -24,9 +24,7 @@ export default function FormPost() {
     try {
       const response = await fetch('http://localhost/api/test/post_method.php', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-        },
+        'Accept' : 'application/json',
         body: JSON.stringify(formData)
       });
 
