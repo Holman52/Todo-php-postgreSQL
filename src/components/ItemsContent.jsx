@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import  Delete  from '../assets/Remove.svg'
 import  Edit  from '../assets/Edit.svg'
-import axios from 'axios';
 import './itemsContent.scss'
 
 export default function ItemsContent() {
@@ -11,12 +10,17 @@ export default function ItemsContent() {
 
     const handleRemove = async (id) =>{
           try {
-             await axios.delete('http://localhost:80/api/test/remove-task.php', {
-                data: { id: id },
+             console.log('Deleting item with ID:', id); // Логируем ID
+    
+            const response = await fetch('http://localhost/api/test/remove-task.php', {
+              method: 'DELETE',
+              body: JSON.stringify({ id }),
             });
-              setData(data.filter(item => item.id_task !== id))
+    
+            console.log('Delete response:', response.data); // Логируем ответ сервера
             } catch (err) {
               setError(err.message);
+              alert('Failed to delete item');
             } 
             
             console.log(data)
