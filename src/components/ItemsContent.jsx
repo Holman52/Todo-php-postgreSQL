@@ -1,12 +1,40 @@
 import { useState, useEffect } from "react";
-import  Delete  from '../assets/Remove.svg'
-import  Edit  from '../assets/Edit.svg'
-import './itemsContent.scss'
+import React from "react";
+import  Delete  from '../assets/Remove.svg';
+import  Edit  from '../assets/Edit.svg';
+import  Cancel  from '../assets/Cancel.svg';
+import  CheckMark  from '../assets/Check-Mark.svg';
+import './itemsContent.scss';
 
 export default function ItemsContent() {
     const [data, setData] = useState([])
     const [error, setError] = useState()
+    const [editingId, setEditingId] = useState(null);
+    const [editForm, setEditForm] = useState({
+        task_desc: '',
+        id_importance: ''
+    });
 
+
+
+
+    const handleAlert = async (id, desc, importance) =>{
+      try{
+        console.log('Alert item with id:', id)
+        const response = await fetch('http://localhost/api/test/remove-task.php' ,{
+          method: 'PUT',
+          body: JSON.stringify({id,desc, importance})
+        })
+        if (!response.ok) {
+          throw new Error('Ошибка при отправке формы');
+        }
+        console.log('Alerted to completed')
+      }catch (error){
+        setError(error.message)
+        console.log(Error)
+      }
+
+    } 
 
     const handleRemove = async (id) =>{
           try {
@@ -41,6 +69,21 @@ export default function ItemsContent() {
     
         fetchData();
     },[])
+
+    const handleEditTask = (item) =>{
+      setEditingId(item.id_task);
+        setEditForm({
+            task_desc: item.task_desc,
+            id_importance: item.id_importance
+        });
+    }
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEditForm(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
   if (error) return <div>Error: {error}</div>;
   return (
     <table className="ItemsContent">
@@ -54,11 +97,61 @@ export default function ItemsContent() {
         <tbody>
         {data.map(item => (
                 <tr className='ItemsContent__rw-items' key={item.id_task}>
-                    <th className='ItemsContent__rw-items__task'>{item.task_desc}</th>
-                    <th className='ItemsContent__rw-items__importance'>{item.id_importance}</th>
+                    <th className='ItemsContent__rw-items__task'>
+                      {editingId === item.id_task ? (
+                                <input
+                                    type="text"
+                                    name="task_desc"
+                                    value={editForm.task_desc}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                item.task_desc
+                            )}
+                    </th>
+                    <th className='ItemsContent__rw-items__importance'>
+                      {editingId === item.id_task ? (
+                                <input
+                                    type="num"
+                                    name="id_importance"
+                                    value={editForm.task_desc}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                item.id_importance
+                            )}
+                    </th>
                     <th className='ItemsContent__rw-items__action'>
-                        <img className="govno-cvg" src={Edit} alt="edit" width="30" height="30" />
-                        <img onClick={() => handleRemove(item.id_task)} className="govno-cvg" src={Delete} alt="delete" width="30" height="30" />
+                        {editingId === item.id_task ? (
+                          <React.Fragment>
+                             <img 
+                                onClick={handleEditTask}
+                                className="govno-cvg" src={CheckMark} alt="edit" 
+                                // width="30" height="30" 
+                              />
+                              <img 
+                                onClick={() => handleRemove(item.id_task)} 
+                                className="govno-cvg" src={Cancel} alt="delete" 
+                                width="30" height="30"
+                              />
+                          </React.Fragment>
+                          
+                        ) :(
+                          <React.Fragment>
+                            <img 
+                              onClick={() => handleEditTask(item)}
+                              className="govno-cvg" src={Edit} alt="edit" 
+                              width="30" height="30" 
+                            />
+                            <img 
+                              onClick={() => handleRemove(item.id_task)} 
+                              className="govno-cvg" src={Delete} alt="delete" 
+                              width="30" height="30"
+                            />
+                          </React.Fragment>
+                        )
+
+                        }
                     </th>
                 </tr>
             ))}

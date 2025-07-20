@@ -26,6 +26,7 @@ export default function FormPost() {
         method: 'POST',
         'Accept' : 'application/json',
         body: JSON.stringify(formData)
+        
       });
 
       if (!response.ok) {
