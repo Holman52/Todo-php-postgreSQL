@@ -84,6 +84,12 @@ export default function ItemsContent() {
             [name]: value
         }));
     };
+    const handleCancelEdit = () => {
+      setEditingId(null)
+    }
+    const handleEditCheck = () => {
+      setEditingId(null)
+    }
   if (error) return <div>Error: {error}</div>;
   return (
     <table className="ItemsContent">
@@ -114,7 +120,7 @@ export default function ItemsContent() {
                                 <input
                                     type="num"
                                     name="id_importance"
-                                    value={editForm.task_desc}
+                                    value={editForm.id_importance}
                                     onChange={handleEditChange}
                                 />
                             ) : (
@@ -125,12 +131,12 @@ export default function ItemsContent() {
                         {editingId === item.id_task ? (
                           <React.Fragment>
                              <img 
-                                onClick={handleEditTask}
+                                onClick={() => handleEditCheck(item)}
                                 className="govno-cvg" src={CheckMark} alt="edit" 
                                 // width="30" height="30" 
                               />
                               <img 
-                                onClick={() => handleRemove(item.id_task)} 
+                                onClick={handleCancelEdit} 
                                 className="govno-cvg" src={Cancel} alt="delete" 
                                 width="30" height="30"
                               />
