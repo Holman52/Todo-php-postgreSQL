@@ -1,10 +1,4 @@
-@font-face {
-  font-family: 'PakenhamBlItalic';
-  src: url('../assets/fonts/PakenhamBlItalic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
+
 .ItemsContent{
     width: 100%;
     &__rw{
@@ -28,7 +22,6 @@
                 text-align: left;
             }
             &__importance{
-                font-family: 'PakenhamBlItalic' sans-serif;
                 font-style: italic;
                 font-size: 1.5rem;
             }
@@ -39,4 +32,14 @@
 }
 .govno-cvg{
     margin: 10px;
+}
+.input-importance{
+    font-size: 1.5rem;
+    font-style: italic;
+    width: 14px;
+}
+.input-task{
+    font-size: 1.2rem;
+    font-style: normal;
+    width: 100%;
 }

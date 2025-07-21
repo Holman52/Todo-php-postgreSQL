@@ -5,6 +5,7 @@ import  Edit  from '../assets/Edit.svg';
 import  Cancel  from '../assets/Cancel.svg';
 import  CheckMark  from '../assets/Check-Mark.svg';
 import './itemsContent.scss';
+import InputItem from "./InputItem";
 
 export default function ItemsContent() {
     const [data, setData] = useState([])
@@ -18,19 +19,30 @@ export default function ItemsContent() {
 
 
 
-    const handleAlert = async (id, desc, importance) =>{
+    const handleAlert = async (id) =>{
       try{
         console.log('Alert item with id:', id)
-        const response = await fetch('http://localhost/api/test/remove-task.php' ,{
+        const response = await fetch('http://localhost/api/test/alert-task.php' ,{
           method: 'PUT',
-          body: JSON.stringify({id,desc, importance})
+          body: JSON.stringify({
+            id:id,
+            desc: editForm.task_desc, 
+            importance: editForm.id_importance})
         })
         if (!response.ok) {
           throw new Error('Ошибка при отправке формы');
         }
+        setEditingId(null)
+        setData(data.map(item => 
+          item.id_task === id ? {
+            ...item,
+            task_desc:editForm.task_desc,
+            id_importance: editForm.id_importance
+          } : item
+        ))
         console.log('Alerted to completed')
-      }catch (error){
-        setError(error.message)
+      }catch (err){
+        setError(err.message)
         console.log(Error)
       }
 
@@ -87,9 +99,6 @@ export default function ItemsContent() {
     const handleCancelEdit = () => {
       setEditingId(null)
     }
-    const handleEditCheck = () => {
-      setEditingId(null)
-    }
   if (error) return <div>Error: {error}</div>;
   return (
     <table className="ItemsContent">
@@ -105,9 +114,11 @@ export default function ItemsContent() {
                 <tr className='ItemsContent__rw-items' key={item.id_task}>
                     <th className='ItemsContent__rw-items__task'>
                       {editingId === item.id_task ? (
-                                <input
+                                <InputItem
                                     type="text"
                                     name="task_desc"
+                                    id="task_desc"
+                                    className="input-task"
                                     value={editForm.task_desc}
                                     onChange={handleEditChange}
                                 />
@@ -117,8 +128,10 @@ export default function ItemsContent() {
                     </th>
                     <th className='ItemsContent__rw-items__importance'>
                       {editingId === item.id_task ? (
-                                <input
+                                <InputItem
                                     type="num"
+                                    id="id_importance"
+                                    className="input-importance"
                                     name="id_importance"
                                     value={editForm.id_importance}
                                     onChange={handleEditChange}
@@ -131,7 +144,7 @@ export default function ItemsContent() {
                         {editingId === item.id_task ? (
                           <React.Fragment>
                              <img 
-                                onClick={() => handleEditCheck(item)}
+                                onClick={() => handleAlert(item.id_task)}
                                 className="govno-cvg" src={CheckMark} alt="edit" 
                                 // width="30" height="30" 
                               />
