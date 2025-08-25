@@ -131,7 +131,7 @@ export default function ItemsContent() {
                         {editingId === item.id_task ? (
                           <React.Fragment>
                              <img 
-                                onClick={() => handleAlert(item.id_task,editForm.task_desc,editForm.id_importance)}
+                                onClick={() =>{handleAlert(item.id_task,editForm.task_desc,editForm.id_importance); setEditingId(null)}}
                                 className="govno-cvg" src={CheckMark} alt="edit" 
                                 // width="30" height="30" 
                               />
