@@ -6,26 +6,31 @@ export const initialState = {
     task: []
 };
 
-export const reducer = (state, { type, payload }) => {
-  switch (type) {
+export const reducer = (state, action) => {
+  switch (action.type) {
     case "GET_TASKS":
       return {
         ...state,
-        task: payload.data
+        task: action.payload.data || action.payload
       };
     case "GET_TASK":
       return {
         ...state,
-        task: payload.data
+        task: action.payload.data || action.payload
+      };
+    case "DELETE_TASK":
+      return {
+        ...state,
+        task: state.task.filter(item => item.id != action.payload)
       };
     case "UPDATE_TASK":
       return {
         ...state,
         task: state.task.map(item => 
-          item.id_task === payload.id ? {
+          item.id_task === action.payload.id ? {
             ...item,
-            task_desc: payload.desc,
-            id_importance: payload.importance
+            task_desc: action.payload.desc,
+            id_importance: action.payload.importance
           } : item
         )
       };

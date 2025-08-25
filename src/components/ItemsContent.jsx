@@ -6,46 +6,47 @@ import  Cancel  from '../assets/Cancel.svg';
 import  CheckMark  from '../assets/Check-Mark.svg';
 import './itemsContent.scss';
 import InputItem from "./InputItem";
+import { useContext } from "react";
+import { ContextTask } from "./context/reducer/reducerCT";
 
 export default function ItemsContent() {
-    const [data, setData] = useState([])
-    const [error, setError] = useState()
+    const { task, handleRemove, handleAlert, getTask } = useContext(ContextTask);
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({
         task_desc: '',
         id_importance: ''
     });
+    console.log(task)
 
 
 
-
-    const handleAlert = async (id) =>{
-      try{
-        console.log('Alert item with id:', id)
-        const response = await fetch('http://localhost/api/test/alert-task.php' ,{
-          method: 'PUT',
-          body: JSON.stringify({
-            id:id,
-            desc: editForm.task_desc, 
-            importance: editForm.id_importance})
-        })
-        if (!response.ok) {
-          throw new Error('Ошибка при отправке формы');
-        }
-        setEditingId(null)
-        setData(data.map(item => 
-          item.id_task === id ? {
-            ...item,
-            task_desc:editForm.task_desc,
-            id_importance: editForm.id_importance
-          } : item
-        ))
-        console.log('Alerted to completed')
-      }catch (err){
-        setError(err.message)
-        console.log(Error)
-      }
-    } 
+    // const handleAlert = async (id) =>{
+    //   try{
+    //     console.log('Alert item with id:', id)
+    //     const response = await fetch('http://localhost/api/test/alert-task.php' ,{
+    //       method: 'PUT',
+    //       body: JSON.stringify({
+    //         id:id,
+    //         desc: editForm.task_desc, 
+    //         importance: editForm.id_importance})
+    //     })
+    //     if (!response.ok) {
+    //       throw new Error('Ошибка при отправке формы');
+    //     }
+    //     setEditingId(null)
+    //     setData(data.map(item => 
+    //       item.id_task === id ? {
+    //         ...item,
+    //         task_desc:editForm.task_desc,
+    //         id_importance: editForm.id_importance
+    //       } : item
+    //     ))
+    //     console.log('Alerted to completed')
+    //   }catch (err){
+    //     setError(err.message)
+    //     console.log(Error)
+    //   }
+    // } 
 
     // const handleRemove = async (id) =>{
     //       try {
@@ -65,20 +66,7 @@ export default function ItemsContent() {
     //         console.log(data)
     // }
     useEffect(()=>{
-        // const fetchData = async () => {
-        //   try {
-        //     const response = await fetch('http://localhost/api/test/echo-task.php');
-        //     if (!response.ok) {
-        //       throw new Error(`Network response was not ok: ${response.status}`);
-        //     }
-        //     const result = await response.json();
-        //     setData(result);
-        //   } catch (err) {
-        //     setError(err.message);
-        //   } 
-        // };
-    
-        // fetchData();
+      getTask()
     },[])
 
     const handleEditTask = (item) =>{
@@ -98,7 +86,7 @@ export default function ItemsContent() {
     const handleCancelEdit = () => {
       setEditingId(null)
     }
-  if (error) return <div>Error: {error}</div>;
+
   return (
     <table className="ItemsContent">
         <thead className="ItemsContent__rw">
@@ -109,7 +97,7 @@ export default function ItemsContent() {
             </tr>
         </thead>
         <tbody>
-        {data.map(item => (
+        {task.map(item => (
                 <tr className='ItemsContent__rw-items' key={item.id_task}>
                     <th className='ItemsContent__rw-items__task'>
                       {editingId === item.id_task ? (
@@ -143,7 +131,7 @@ export default function ItemsContent() {
                         {editingId === item.id_task ? (
                           <React.Fragment>
                              <img 
-                                onClick={() => handleAlert(item.id_task)}
+                                onClick={() => handleAlert(item.id_task,editForm.task_desc,editForm.id_importance)}
                                 className="govno-cvg" src={CheckMark} alt="edit" 
                                 // width="30" height="30" 
                               />
@@ -162,7 +150,7 @@ export default function ItemsContent() {
                               width="30" height="30" 
                             />
                             <img 
-                              // onClick={() => handleRemove(item.id_task)} 
+                              onClick={() => handleRemove(item.id_task)} 
                               className="govno-cvg" src={Delete} alt="delete" 
                               width="30" height="30"
                             />

@@ -10,7 +10,7 @@ export  const ItemsProvider = ({ children }) => {
             if (!response.ok) {
                   throw new Error(`Network response was not ok: ${response.status}`);
             }
-            const result = await response.json();
+            const result = await response.json()
             dispatch({
               type: "GET_TASKS",
               payload: result,
@@ -18,6 +18,7 @@ export  const ItemsProvider = ({ children }) => {
             } 
         catch (err) {
             setError(err.message);
+            console.log(error)
         } 
     }
 
@@ -29,7 +30,7 @@ export  const ItemsProvider = ({ children }) => {
               method: 'DELETE',
               body: JSON.stringify({ id }),
             });
-    
+            
             console.log('Delete response:', response.data); // Логируем ответ сервера
             getTask()
             } catch (err) {
@@ -62,19 +63,21 @@ export  const ItemsProvider = ({ children }) => {
             });
 
         console.log('Alerted to completed')
-        getTask()
+   
       }catch (err){
         setError(err.message)
         console.log(Error)
       }
     } 
     if (error) return <div>Error: {error}</div>;
+    const task= state.task
+    console.log(state)
   return (
     <ContextTask.Provider value={{ 
-        task: state.task,
+        task,
         handleAlert,
         handleRemove,
-        getTask
+        getTask,
      }}>
       {children}
     </ContextTask.Provider>
