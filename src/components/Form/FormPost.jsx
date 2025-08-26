@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Input from './Input'
 import './FormPost.scss'
 import Button from '../Button';
+import { ContextTask } from '../context/reducer/reducerCT';
 
 
 export default function FormPost() {
   const [isOpen, setIsOpen] = useState(false);
+  const {handleAdd} = useContext(ContextTask)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     task: '',
@@ -22,16 +24,7 @@ export default function FormPost() {
     e.preventDefault();
     setIsSubmitting(true)
     try {
-      const response = await fetch('http://localhost/api/test/post_method.php', {
-        method: 'POST',
-        'Accept' : 'application/json',
-        body: JSON.stringify(formData)
-        
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке формы');
-      }
+      handleAdd(formData)
     }
     catch(error){
       console.log(error)

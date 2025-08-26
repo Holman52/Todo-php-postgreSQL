@@ -13,10 +13,10 @@ export const reducer = (state, action) => {
         ...state,
         task: action.payload.data || action.payload
       };
-    case "GET_TASK":
+    case 'ADD_TASK':
       return {
         ...state,
-        task: action.payload.data || action.payload
+        tasks: [...state.tasks, action.payload],
       };
     case "DELETE_TASK":
       return {

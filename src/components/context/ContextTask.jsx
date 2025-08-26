@@ -22,6 +22,19 @@ export  const ItemsProvider = ({ children }) => {
         } 
     }
 
+    const handleAdd = async (formData) =>{
+        const response = await fetch('http://localhost/api/test/post_method.php', {
+        method: 'POST',
+        'Accept' : 'application/json',
+        body: JSON.stringify(formData)
+        
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка при отправке формы');
+      }
+      getTask()
+    }
     const handleRemove = async (id) =>{
           try {
              console.log('Deleting item with ID:', id); // Логируем ID
@@ -37,9 +50,9 @@ export  const ItemsProvider = ({ children }) => {
               setError(err.message);
               alert('Failed to delete item');
             } 
-            
     }
-
+  
+    
     const handleAlert = async (id,desc,id_importance) =>{
       try{
         console.log('Alert item with id:', id)
@@ -78,12 +91,9 @@ export  const ItemsProvider = ({ children }) => {
         handleAlert,
         handleRemove,
         getTask,
+        handleAdd,
      }}>
       {children}
     </ContextTask.Provider>
   );
 };
-
-
-
-
