@@ -1,9 +1,29 @@
-import  {  useReducer,  useState } from 'react';
+import  {  useReducer,  useState, useEffect, useRef } from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
 
 export  const ItemsProvider = ({ children }) => {
+
     const [state, dispatch] = useReducer(reducer, initialState); 
     const [error, setError] = useState()
+    const socket = useRef()
+    useEffect(() => {
+      socket.current = new WebSocket('ws://localhost:5000')
+
+      socket.current.onopen = () =>{
+        console.log('открытие сокета')
+      }
+      socket.current.onmessage = () =>{
+        console.log('отправка сокета')
+      }
+      socket.current.onclose = () =>{
+        console.log('закрытие сокета')
+      }
+      socket.current.onerror = (error) =>{
+        console.log(error)
+      }
+    
+  }, [])
+  
     const getTask = async ()=>{
         try {
             const response = await fetch('http://localhost/api/test/echo-task.php');
@@ -27,9 +47,9 @@ export  const ItemsProvider = ({ children }) => {
         method: 'POST',
         'Accept' : 'application/json',
         body: JSON.stringify(formData)
-        
       });
-
+      const result = await response.json()
+      socket.current.send(JSON.stringify(result));
       if (!response.ok) {
         throw new Error('Ошибка при отправке формы');
       }

@@ -13,6 +13,9 @@ export default function FormPost() {
     task: '',
     num: '',
   })
+
+
+
   const handleChange = (e) => {
     const {name, value} = e.target
     setFormData(prev => ({
@@ -36,8 +39,6 @@ export default function FormPost() {
         num: '',
       })
   }
-
-  
 }
 console.log(formData)
   return (
