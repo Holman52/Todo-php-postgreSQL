@@ -9,12 +9,14 @@ const wss = new WebSocketServer({
 wss.on('connection', function(ws){
     ws.on('message' , (message) =>{
         const content = JSON.parse(message)
-        switch (content.event) {
-            case 'connection':
+        switch (content.type) {
+            case 'TASK_CREATED':
                 broadcast(content)
                 break;
-
-            case 'message':
+            case 'TASK_UPDATED':
+                broadcast(content)
+                break;
+            case 'TASK_DELETED':
                 broadcast(content)
                 break;
         }
