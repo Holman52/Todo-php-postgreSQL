@@ -1,27 +1,66 @@
-import  {  useReducer,  useState, useEffect} from 'react';
+import  {  useReducer,  useState, useEffect, useContext} from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
-import {addMessageListener} from './WebSocketContext';
+import { WebSocketContext } from './ContextForWeb';
+
 export const ItemsProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState); 
     const [error, setError] = useState()
+    const { sendMessage, addMessageListener } = useContext(WebSocketContext);
     useEffect(() => {
     const unsubscribe = addMessageListener((message) => {
+      console.log('📨 Получено сообщение:', message);
       switch (message.type) {
+        case 'TASKS_LIST':
+          dispatch({ type: 'SET_TASKS', payload: message.data });
+          break;
+
         case 'TASK_CREATED':
           dispatch({ type: 'ADD_TASK', payload: message.data });
           break;
+
         case 'TASK_UPDATED':
           dispatch({ type: 'UPDATE_TASK', payload: message.data });
           break;
+
         case 'TASK_DELETED':
           dispatch({ type: 'DELETE_TASK', payload: message.data.id });
           break;
+
+        default:
+          console.log('Неизвестный тип сообщения:', message.type);
       }
-      return unsubscribe
     });
 
+    
     return unsubscribe;
   }, [addMessageListener]);
+  const createTask = (taskData) => {
+    sendMessage({
+      type: 'TASK_CREATED',
+      data: taskData
+    });
+  };
+
+const updateTask = (taskId, updates) => {
+  sendMessage({
+    type: 'UPDATE_TASK',
+    data: { id: taskId, ...updates }
+  });
+};
+
+const deleteTask = (taskId) => {
+  sendMessage({
+    type: 'DELETE_TASK',
+    data: { id: taskId }
+  });
+};
+
+const toggleTask = (taskId) => {
+  sendMessage({
+    type: 'TOGGLE_TASK',
+    data: { id: taskId }
+  });
+};
     const getTask = async ()=>{
         try {
             const response = await fetch('http://localhost/api/test/echo-task.php');
@@ -46,21 +85,22 @@ export const ItemsProvider = ({ children }) => {
         'Accept' : 'application/json',
         body: JSON.stringify(formData)
       });
+      createTask(formData)
       if (!response.ok) {
         throw new Error('Ошибка при отправке формы');
       }
-      getTask()
+      // getTask()
     }
     const handleRemove = async (id) =>{
           try {
-             console.log('Deleting item with ID:', id); // Логируем ID
+             console.log('Deleting item with ID:', id); 
     
             const response = await fetch('http://localhost/api/test/remove-task.php', {
               method: 'DELETE',
               body: JSON.stringify({ id }),
             });
             
-            console.log('Delete response:', response.data); // Логируем ответ сервера
+            console.log('Delete response:', response.data); 
             getTask()
             } catch (err) {
               setError(err.message);
@@ -100,7 +140,6 @@ export const ItemsProvider = ({ children }) => {
     } 
     if (error) return <div>Error: {error}</div>;
     const task= state.task
-    console.log(state)
   return (
     <ContextTask.Provider value={{ 
         task,
@@ -108,6 +147,11 @@ export const ItemsProvider = ({ children }) => {
         handleRemove,
         getTask,
         handleAdd,
+        updateTask,
+        deleteTask,
+        createTask,
+        toggleTask
+
      }}>
       {children}
     </ContextTask.Provider>

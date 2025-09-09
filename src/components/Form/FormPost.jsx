@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import {  useContext, useState } from 'react';
 import Input from './Input'
 import './FormPost.scss'
 import Button from '../Button';
@@ -40,7 +40,6 @@ export default function FormPost() {
       })
   }
 }
-console.log(formData)
   return (
     <div className='form'>
       <div 

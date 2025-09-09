@@ -16,7 +16,6 @@ export default function ItemsContent() {
         task_desc: '',
         id_importance: ''
     });
-    console.log(task)
 
 
 

@@ -1,11 +1,11 @@
-import React, { createContext, useRef, useCallback, useState, useEffect } from 'react';
+import React, { useRef, useCallback, useState, useEffect} from 'react';
+import { WebSocketContext } from './ContextForWeb';
 
-const WebSocketContext = createContext(null);
-
-export const WebSocketProvider = ({ children, url }) => {
+export const WebSocketProvider = ({ children }) => {
   const ws = useRef(null);
   const [isConnected, setIsConnected] = useState(false);
   const messageListeners = useRef(new Set());
+  const isInitialized = useRef(false);
 
   const sendMessage = useCallback((message) => {
     if (ws.current?.readyState === WebSocket.OPEN) {
@@ -21,24 +21,27 @@ export const WebSocketProvider = ({ children, url }) => {
   }, []);
 
   useEffect(() => {
-    ws.current = new WebSocket(url);
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+    ws.current = new WebSocket('ws://localhost:5000');
 
-    const handleOpen = () => {
+    ws.current.onopen = () => {
       console.log('WebSocket connected');
       setIsConnected(true);
     };
 
-    const handleClose = () => {
+    ws.current.onclose = () => {
       console.log('WebSocket disconnected');
       setIsConnected(false);
     };
 
-    const handleMessage = (event) => {
+    ws.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
         messageListeners.current.forEach(listener => {
           try {
             listener(message);
+            console.log(message)
           } catch (error) {
             console.error('Error in message listener:', error);
           }
@@ -48,28 +51,10 @@ export const WebSocketProvider = ({ children, url }) => {
       }
     };
 
-    const handleError = (error) => {
+    ws.current.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
-
-    ws.current.addEventListener('open', handleOpen);
-    ws.current.addEventListener('close', handleClose);
-    ws.current.addEventListener('message', handleMessage);
-    ws.current.addEventListener('error', handleError);
-
-    return () => {
-      if (ws.current) {
-        ws.current.removeEventListener('open', handleOpen);
-        ws.current.removeEventListener('close', handleClose);
-        ws.current.removeEventListener('message', handleMessage);
-        ws.current.removeEventListener('error', handleError);
-        
-        if (ws.current.readyState === WebSocket.OPEN) {
-          ws.current.close();
-        }
-      }
-    };
-  }, [url]);
+  }, []);
 
   const value = {
     sendMessage,
