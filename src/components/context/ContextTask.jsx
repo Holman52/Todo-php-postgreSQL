@@ -1,6 +1,7 @@
 import  {  useReducer,  useState, useEffect, useContext} from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
 import { WebSocketContext } from './ContextForWeb';
+import getTask, {handleAdd} from "@/utils/ActionTask.jsx";
 
 export const ItemsProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState); 
@@ -43,7 +44,7 @@ export const ItemsProvider = ({ children }) => {
 
 const updateTask = (taskId, updates) => {
   sendMessage({
-    type: 'UPDATE_TASK',
+    type: 'TASK_UPDATED',
     data: { id: taskId, ...updates }
   });
 };
@@ -55,59 +56,24 @@ const deleteTask = (taskId) => {
   });
 };
 
-const toggleTask = (taskId) => {
-  sendMessage({
-    type: 'TOGGLE_TASK',
-    data: { id: taskId }
-  });
-};
-    const getTask = async ()=>{
-        try {
-            const response = await fetch('http://localhost/api/test/echo-task.php');
-            if (!response.ok) {
-                  throw new Error(`Network response was not ok: ${response.status}`);
-            }
-            const result = await response.json()
-            dispatch({
-              type: "GET_TASKS",
-              payload: result,
-            });
-            } 
-        catch (err) {
-            setError(err.message);
-            console.log(error)
-        } 
-    }
 
-    const handleAdd = async (formData) =>{
-        const response = await fetch('http://localhost/api/test/post_method.php', {
-        method: 'POST',
-        'Accept' : 'application/json',
-        body: JSON.stringify(formData)
-      });
-      createTask(formData)
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке формы');
-      }
-      // getTask()
-    }
-    const handleRemove = async (id) =>{
-          try {
-             console.log('Deleting item with ID:', id); 
-    
-            const response = await fetch('http://localhost/api/test/remove-task.php', {
-              method: 'DELETE',
-              body: JSON.stringify({ id }),
-            });
-            
-            console.log('Delete response:', response.data); 
-            getTask()
-            } catch (err) {
-              setError(err.message);
-              alert('Failed to delete item');
-            } 
-    }
-  
+    // const handleRemove = async (id) =>{
+    //       try {
+    //          console.log('Deleting item with ID:', id);
+    //
+    //         const response = await fetch('http://localhost/api/test/remove-task.php', {
+    //           method: 'DELETE',
+    //           body: JSON.stringify({ id }),
+    //         });
+    //
+    //         console.log('Delete response:', response.data);
+    //         getTask()
+    //         } catch (err) {
+    //           setError(err.message);
+    //           alert('Failed to delete item');
+    //         }
+    // }
+    //
     
     const handleAlert = async (id,desc,id_importance) =>{
       try{
@@ -150,8 +116,6 @@ const toggleTask = (taskId) => {
         updateTask,
         deleteTask,
         createTask,
-        toggleTask
-
      }}>
       {children}
     </ContextTask.Provider>

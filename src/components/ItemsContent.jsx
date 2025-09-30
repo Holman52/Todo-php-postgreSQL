@@ -17,53 +17,6 @@ export default function ItemsContent() {
         id_importance: ''
     });
 
-
-
-    // const handleAlert = async (id) =>{
-    //   try{
-    //     console.log('Alert item with id:', id)
-    //     const response = await fetch('http://localhost/api/test/alert-task.php' ,{
-    //       method: 'PUT',
-    //       body: JSON.stringify({
-    //         id:id,
-    //         desc: editForm.task_desc, 
-    //         importance: editForm.id_importance})
-    //     })
-    //     if (!response.ok) {
-    //       throw new Error('Ошибка при отправке формы');
-    //     }
-    //     setEditingId(null)
-    //     setData(data.map(item => 
-    //       item.id_task === id ? {
-    //         ...item,
-    //         task_desc:editForm.task_desc,
-    //         id_importance: editForm.id_importance
-    //       } : item
-    //     ))
-    //     console.log('Alerted to completed')
-    //   }catch (err){
-    //     setError(err.message)
-    //     console.log(Error)
-    //   }
-    // } 
-
-    // const handleRemove = async (id) =>{
-    //       try {
-    //          console.log('Deleting item with ID:', id); // Логируем ID
-    
-    //         const response = await fetch('http://localhost/api/test/remove-task.php', {
-    //           method: 'DELETE',
-    //           body: JSON.stringify({ id }),
-    //         });
-    
-    //         console.log('Delete response:', response.data); // Логируем ответ сервера
-    //         } catch (err) {
-    //           setError(err.message);
-    //           alert('Failed to delete item');
-    //         } 
-            
-    //         console.log(data)
-    // }
     useEffect(()=>{
       getTask()
     },[])
