@@ -17,9 +17,9 @@ export default function ItemsContent() {
         id_importance: ''
     });
 
-    useEffect(()=>{
-      getTask()
-    },[])
+    // useEffect(()=>{
+    //   getTask()
+    // },[])
 
     const handleEditTask = (item) =>{
       setEditingId(item.id_task);
