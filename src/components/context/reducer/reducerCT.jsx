@@ -7,21 +7,26 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+    console.log('REDUCER ACTION:', action.type, 'PAYLOAD:', action.payload);
+    console.log('PREV STATE:', state);
   switch (action.type) {
     case "GET_TASKS":
-      return {
-        ...state,
-        task: action.payload.data || action.payload
-      };
+        const newState = {
+            ...state,
+            task: action.payload,
+        };
+        console.log('NEW STATE:', newState);
+        return newState;
+
     case 'ADD_TASK':
       return {
         ...state,
-        tasks: [...state.task, action.payload],
+        task: [...state.task, action.payload],
       };
     case "DELETE_TASK":
       return {
         ...state,
-        task: state.task.filter(item => item.id != action.payload)
+        task: state.task.filter(item => item.id !== action.payload)
       };
     case "UPDATE_TASK":
       return {

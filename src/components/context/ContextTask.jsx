@@ -1,7 +1,7 @@
 import  {  useReducer,  useState, useEffect, useContext} from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
 import { WebSocketContext } from './ContextForWeb';
-import {ApiTask} from "@/utils/ApiTask.js";
+import {ApiTask} from "@/utils/ApiTask.jsx";
 import {createTaskActions} from "@/utils/SocketMessageAction.js";
 import {createWebSocketHandlers} from "@/utils/WebSocketHandler.js";
 
@@ -12,7 +12,7 @@ export const ItemsProvider = ({ children }) => {
     const {sendMessage, addMessageListener} = useContext(WebSocketContext);
     const {handleWebSocketMessage} = createWebSocketHandlers(dispatch);
     const {createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
-
+    const { handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
     useEffect(() => {
         const unsubscribe = addMessageListener((message) => {
             handleWebSocketMessage(message);
@@ -21,18 +21,18 @@ export const ItemsProvider = ({ children }) => {
     }, [addMessageListener]);
     const handlerAdd = (taskData) => {
         try {
-            const result = ApiTask.handleAdd(taskData);
+            const result = handleAddTask(taskData);
             createTask(result);
         } catch (error) {
             console.error(error.message);
         }
 
     };
-
     const handlerAlert = (id, desc, id_importance) => {
         try {
-            ApiTask.handleAlertTask(id, desc, id_importance);
+            const result = handleAlertTask(id, desc, id_importance);
             updateTask(id, desc, id_importance)
+            return  result
         } catch (e) {
             console.log(e.message)
         }
@@ -41,15 +41,16 @@ export const ItemsProvider = ({ children }) => {
 
     const handlerDelete = (taskId) => {
         try {
-            ApiTask.handleRemove(taskId);
+            const result = handleRemoveTask(taskId);
             deleteTask(taskId);
+            return  result
+
         } catch (e) {
             console.log(e.message)
 
         }
     };
-
-
+    console.log(state.task)
         if (error) return <div>Error: {error}</div>;
         return (
             <ContextTask.Provider value={{

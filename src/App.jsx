@@ -7,6 +7,7 @@ import FormPost from './components/Form/FormPost'
 
 function App() {
   return (
+
     <WebSocketProvider>
     <ItemsProvider>
       <div className='main'>
@@ -15,6 +16,8 @@ function App() {
       </div>
     </ItemsProvider>
     </WebSocketProvider>
+
+
   )
 }
 

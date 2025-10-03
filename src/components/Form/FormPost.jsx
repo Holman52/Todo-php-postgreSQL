@@ -7,7 +7,7 @@ import { ContextTask } from '../context/reducer/reducerCT';
 
 export default function FormPost() {
   const [isOpen, setIsOpen] = useState(false);
-  const {handleAdd} = useContext(ContextTask)
+  const {handlerAdd} = useContext(ContextTask)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     task: '',
@@ -27,7 +27,7 @@ export default function FormPost() {
     e.preventDefault();
     setIsSubmitting(true)
     try {
-      handleAdd(formData)
+      handlerAdd(formData)
     }
     catch(error){
       console.log(error)
