@@ -9,14 +9,16 @@ export const initialState = {
 export const reducer = (state, action) => {
   switch (action.type) {
     case "GET_TASKS":
+        console.log(action.payload);
       return {
         ...state,
-        task: action.payload.data || action.payload
+        task: action.payload.data || action.payload,
       };
+
     case 'ADD_TASK':
       return {
         ...state,
-        tasks: [...state.task, action.payload],
+        task: [...state.task, action.payload],
       };
     case "DELETE_TASK":
       return {

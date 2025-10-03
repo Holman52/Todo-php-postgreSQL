@@ -1,23 +1,27 @@
+import {useReducer} from "react";
 
-export const ApiTask =  {
-     getTask: async ()=>{
-        try {
+import { reducer,  initialState } from '../components/context/reducer/reducerCT.jsx';
+
+export const ApiTask = () => {
+     const [state, dispatch] = useReducer(reducer, initialState)
+     const getTask = async ()=>{
+         try {
             const response = await fetch('http://localhost/api/test/echo-task.php');
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.status}`);
             }
-            const result = await response.json()
-            // dispatch({
-            //   type: "GET_TASKS",
-            //   payload: result,
-            // });
+            const result = await response.json();
+            dispatch({
+              type: "GET_TASKS",
+              payload: result,
+            });
+            console.log(result);
         }
         catch (err) {
             console.log(err.message);
         }
-        return result
-    },
-    handleAdd: async (// formData, createTask
+    }
+    const handleAddTask= async ( formData
      ) => {
         const response = await fetch('http://localhost/api/test/post_method.php', {
             method: 'POST',
@@ -27,13 +31,18 @@ export const ApiTask =  {
             },
             body: JSON.stringify(formData)
         });
+        const result = await response.json();
+        console.log(result.data);
+        console.log(result);
+        dispatch({
+            type: "ADD_TASK",
+            payload: result,
+        })
         if (!response.ok) {
             throw new Error('Ошибка при отправке формы');
         }
-
-        return response.json(); // или response.json() если сервер возвращает данные
-    },
-    handleAlertTask: async (id,desc,id_importance) =>{
+    }
+    const handleAlertTask = async (id,desc,id_importance) =>{
         try{
             console.log('Alert item with id:', id)
             const response = await fetch('http://localhost/api/test/alert-task.php' ,{
@@ -46,22 +55,23 @@ export const ApiTask =  {
             if (!response.ok) {
                 throw new Error('Ошибка при отправке формы');
             }
-            // dispatch({
-            //     type: "UPDATE_TASK",
-            //     payload: {
-            //         id: id,
-            //         desc: desc,
-            //         importance: id_importance
-            //     }
-            // });
+            dispatch({
+                type: "UPDATE_TASK",
+                payload: {
+                    id: id,
+                    desc: desc,
+                    importance: id_importance
+                }
+            });
+            console.log(state)
 
             console.log('Alerted to completed')
 
         }catch (err){
             console.log(err.message)
         }
-    },
-    handleRemove: async (id) =>{
+    }
+    const handleRemoveTask= async (id) =>{
         try {
             console.log('Deleting item with ID:', id);
 
@@ -69,11 +79,21 @@ export const ApiTask =  {
                 method: 'DELETE',
                 body: JSON.stringify({ id }),
             });
-
+            dispatch({
+                type: "REMOVE_TASK",
+                payload: id
+            })
             console.log('Delete response:', response.data);
         } catch (err) {
             console.log(err.message);
             alert('Failed to delete item');
         }
     }
+    return {
+        state,
+        getTask,
+        handleAddTask,
+        handleAlertTask,
+        handleRemoveTask
+    };
 }

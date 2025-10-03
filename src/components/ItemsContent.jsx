@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 import  Delete  from '../assets/Remove.svg';
 import  Edit  from '../assets/Edit.svg';
@@ -6,20 +6,16 @@ import  Cancel  from '../assets/Cancel.svg';
 import  CheckMark  from '../assets/Check-Mark.svg';
 import './itemsContent.scss';
 import InputItem from "./InputItem";
-import { useContext } from "react";
-import { ContextTask } from "./context/reducer/reducerCT";
+import {useContextTask} from "./context/reducer/reducerCT";
 
 export default function ItemsContent() {
-    const { task, handleRemove, handleAlert, getTask } = useContext(ContextTask);
+    const {  task, handleRemove, handleAlert} = useContextTask();
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({
         task_desc: '',
         id_importance: ''
     });
 
-    // useEffect(()=>{
-    //   getTask()
-    // },[])
 
     const handleEditTask = (item) =>{
       setEditingId(item.id_task);
