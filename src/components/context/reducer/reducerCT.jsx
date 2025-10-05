@@ -11,12 +11,20 @@ export const reducer = (state, action) => {
     console.log('PREV STATE:', state);
   switch (action.type) {
     case "GET_TASKS":
+<<<<<<< HEAD
         const newState = {
             ...state,
             task: action.payload,
         };
         console.log('NEW STATE:', newState);
         return newState;
+=======
+        console.log(action.payload);
+      return {
+        ...state,
+        task: action.payload.data || action.payload,
+      };
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
 
     case 'ADD_TASK':
       return {

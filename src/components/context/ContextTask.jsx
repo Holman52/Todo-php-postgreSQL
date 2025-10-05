@@ -12,7 +12,11 @@ export const ItemsProvider = ({ children }) => {
     const {sendMessage, addMessageListener} = useContext(WebSocketContext);
     const {handleWebSocketMessage} = createWebSocketHandlers(dispatch);
     const {createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
+<<<<<<< HEAD
     const { handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
+=======
+    const {  handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
     useEffect(() => {
         const unsubscribe = addMessageListener((message) => {
             handleWebSocketMessage(message);
@@ -50,7 +54,11 @@ export const ItemsProvider = ({ children }) => {
 
         }
     };
+<<<<<<< HEAD
     console.log(state.task)
+=======
+    console.log(state)
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
         if (error) return <div>Error: {error}</div>;
         return (
             <ContextTask.Provider value={{

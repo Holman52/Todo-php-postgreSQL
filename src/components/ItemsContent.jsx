@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import {useEffect, useState} from "react";
+=======
+import { useState } from "react";
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
 import React from "react";
 import  Delete  from '../assets/Remove.svg';
 import  Edit  from '../assets/Edit.svg';
@@ -7,7 +11,10 @@ import  CheckMark  from '../assets/Check-Mark.svg';
 import './itemsContent.scss';
 import InputItem from "./InputItem";
 import {useContextTask} from "./context/reducer/reducerCT";
+<<<<<<< HEAD
 import {ApiTask} from "@/utils/ApiTask.jsx";
+=======
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
 
 export default function ItemsContent() {
     const {  task, handleRemove, handleAlert} = useContextTask();
@@ -18,10 +25,13 @@ export default function ItemsContent() {
     });
     const {getTask} = ApiTask();
 
+<<<<<<< HEAD
     useEffect(() => {
         getTask()
         console.log(task)
     }, []);
+=======
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
 
     const handleEditTask = (item) =>{
       setEditingId(item.id_task);

@@ -89,6 +89,7 @@ export const ApiTask = () => {
             alert('Failed to delete item');
         }
     }
+<<<<<<< HEAD
     console.log(state)
     return {
         state,
@@ -98,4 +99,13 @@ export const ApiTask = () => {
             handleRemoveTask
     }
     ;
+=======
+    return {
+        state,
+        getTask,
+        handleAddTask,
+        handleAlertTask,
+        handleRemoveTask
+    };
+>>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
 }
