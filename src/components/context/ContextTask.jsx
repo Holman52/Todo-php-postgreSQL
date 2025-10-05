@@ -12,21 +12,40 @@ export const ItemsProvider = ({ children }) => {
     const {sendMessage, addMessageListener} = useContext(WebSocketContext);
     const {handleWebSocketMessage} = createWebSocketHandlers(dispatch);
     const {createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
-<<<<<<< HEAD
-    const { handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
-=======
-    const {  handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
->>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
+    const { getTask,handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
+
     useEffect(() => {
         const unsubscribe = addMessageListener((message) => {
             handleWebSocketMessage(message);
         })
         return unsubscribe
     }, [addMessageListener]);
+
+    const  getTasks = () => {
+        try {
+            getTask()
+                .then(result => {
+                    console.log(result);
+                    dispatch({
+                        type: "GET_TASKS",
+                        payload: result
+                    })
+                })
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
     const handlerAdd = (taskData) => {
         try {
-            const result = handleAddTask(taskData);
-            createTask(result);
+            handleAddTask(taskData)
+                .then(taskData => {
+                    dispatch({
+                        type: "ADD_TASK",
+                        payload: taskData,
+                    })
+                });
+
+            createTask(taskData);
         } catch (error) {
             console.error(error.message);
         }
@@ -54,15 +73,14 @@ export const ItemsProvider = ({ children }) => {
 
         }
     };
-<<<<<<< HEAD
-    console.log(state.task)
-=======
+
     console.log(state)
->>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
+
         if (error) return <div>Error: {error}</div>;
         return (
             <ContextTask.Provider value={{
                 task: state.task,
+                getTasks,
                 updateTask,
                 deleteTask,
                 createTask,

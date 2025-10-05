@@ -11,16 +11,12 @@ export const ApiTask = () => {
                 throw new Error(`Network response was not ok: ${response.status}`);
             }
             const result = await response.json();
-            dispatch({
-              type: "GET_TASKS",
-              payload: result,
-            });
-            console.log(result);
+           return result;
         }
         catch (err) {
             console.log(err.message);
         }
-    }
+    }``
     const handleAddTask= async ( formData
      ) => {
         const response = await fetch('http://localhost/api/test/post_method.php', {
@@ -32,12 +28,7 @@ export const ApiTask = () => {
             body: JSON.stringify(formData)
         });
         const result = await response.json();
-        console.log(result.data);
-        console.log(result);
-        dispatch({
-            type: "ADD_TASK",
-            payload: result,
-        })
+        return  result
         if (!response.ok) {
             throw new Error('Ошибка при отправке формы');
         }
@@ -89,17 +80,8 @@ export const ApiTask = () => {
             alert('Failed to delete item');
         }
     }
-<<<<<<< HEAD
+
     console.log(state)
-    return {
-        state,
-            getTask,
-            handleAddTask,
-            handleAlertTask,
-            handleRemoveTask
-    }
-    ;
-=======
     return {
         state,
         getTask,
@@ -107,5 +89,5 @@ export const ApiTask = () => {
         handleAlertTask,
         handleRemoveTask
     };
->>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
+
 }

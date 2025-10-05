@@ -1,9 +1,8 @@
 import React, { useRef, useCallback, useState, useEffect} from 'react';
 import { WebSocketContext } from './ContextForWeb';
-<<<<<<< HEAD
-=======
+
 import {ApiTask} from "@/utils/ApiTask.jsx";
->>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
+
 
 export const WebSocketProvider = ({ children }) => {
   const ws = useRef(null);
@@ -31,10 +30,8 @@ export const WebSocketProvider = ({ children }) => {
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');
-<<<<<<< HEAD
-=======
+
     getTask()
->>>>>>> 8f5de33bf89acfdd4f09a6e3c881b17b610b6f7a
       setIsConnected(true);
 
     };
