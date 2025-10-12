@@ -1,4 +1,10 @@
 export const createTaskActions = (sendMessage) => ({
+    getAllTasks: (taskData) => {
+        sendMessage({
+            type: 'TASKS_LIST',
+            data: taskData
+        });
+    },
     createTask: (taskData) => {
         sendMessage({
             type: 'TASK_CREATED',

@@ -11,7 +11,7 @@ export const ItemsProvider = ({ children }) => {
     const [error, setError] = useState()
     const {sendMessage, addMessageListener} = useContext(WebSocketContext);
     const {handleWebSocketMessage} = createWebSocketHandlers(dispatch);
-    const {createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
+    const { getAllTasks,createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
     const { getTask,handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();
 
     useEffect(() => {
@@ -30,6 +30,7 @@ export const ItemsProvider = ({ children }) => {
                         type: "GET_TASKS",
                         payload: result
                     })
+                    getAllTasks(result)
                 })
         } catch (error) {
             console.error(error.message);
@@ -37,13 +38,13 @@ export const ItemsProvider = ({ children }) => {
     }
     const handlerAdd = (taskData) => {
         try {
-            handleAddTask(taskData)
-                .then(taskData => {
-                    dispatch({
-                        type: "ADD_TASK",
-                        payload: taskData,
-                    })
-                });
+            handleAddTask(taskData).then(result => {
+                dispatch({
+                    type: "GET_TASKS",
+                    payload: result
+                })
+            })
+            console.log("1111",taskData);
 
             createTask(taskData);
         } catch (error) {

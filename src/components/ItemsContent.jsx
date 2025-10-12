@@ -22,7 +22,7 @@ export default function ItemsContent() {
     useEffect(() => {
         getTasks()
         console.log(task)
-    }, []);
+    },[]);
 
 
     const handleEditTask = (item) =>{

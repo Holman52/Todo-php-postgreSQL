@@ -30,8 +30,6 @@ export const WebSocketProvider = ({ children }) => {
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');
-
-    getTask()
       setIsConnected(true);
 
     };
@@ -41,20 +39,25 @@ export const WebSocketProvider = ({ children }) => {
       setIsConnected(false);
     };
 
-    ws.current.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        messageListeners.current.forEach(listener => {
-          try {
-            listener(message);
-            console.log(message)
-          } catch (error) {
-            console.error('Error in message listener:', error);
-          }
-        });
-      } catch (error) {
-        console.error('WebSocket message parsing error:', error, event.data);
-      }
+    ws.current.onmessage = async (event) => {
+        try {
+            const message = JSON.parse(event.data);
+            console.log("WebSocket сообщение:", message);
+
+            if (message.type === 'TASKS_UPDATED') {
+                const tasks = await getTask();
+                messageListeners.current.forEach(listener => {
+                    listener(tasks);
+                });
+            } else if (message.type === 'NEW_TASK') {
+                messageListeners.current.forEach(listener => {
+                    listener(message.data);
+                });
+            }
+
+        } catch (error) {
+            console.error('WebSocket message parsing error:', error, event.data);
+        }
     };
 
     ws.current.onerror = (error) => {

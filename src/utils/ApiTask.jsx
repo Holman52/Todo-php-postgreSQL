@@ -16,22 +16,24 @@ export const ApiTask = () => {
         catch (err) {
             console.log(err.message);
         }
-    }``
+    }
     const handleAddTask= async ( formData
      ) => {
-        const response = await fetch('http://localhost/api/test/post_method.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-        const result = await response.json();
-        return  result
-        if (!response.ok) {
-            throw new Error('Ошибка при отправке формы');
-        }
+         try{
+             const response = await fetch('http://localhost/api/test/post_method.php', {
+             method: 'POST',
+             body: JSON.stringify(formData)
+         });
+             const result = await response.json()
+             if (!response.ok) {
+                 throw new Error('Ошибка при отправке формы');
+             }
+             console.log("result add",result);
+             return  result;
+         }
+         catch (error){
+             console.log(error)
+         }
     }
     const handleAlertTask = async (id,desc,id_importance) =>{
         try{
