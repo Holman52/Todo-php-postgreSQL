@@ -1,15 +1,15 @@
 import  {  useReducer,  useState, useEffect, useContext} from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
-import { WebSocketContext } from './ContextForWeb';
 import {ApiTask} from "@/utils/ApiTask.jsx";
 import {createTaskActions} from "@/utils/SocketMessageAction.js";
 import {createWebSocketHandlers} from "@/utils/WebSocketHandler.js";
+import {useWebSocketContext} from "@/components/context/reducer/reducerSocket.jsx";
 
 
 export const ItemsProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [error, setError] = useState()
-    const {sendMessage, addMessageListener} = useContext(WebSocketContext);
+    const {sendMessage, addMessageListener} = useWebSocketContext();
     const {handleWebSocketMessage} = createWebSocketHandlers(dispatch);
     const { getAllTasks,createTask, updateTask, deleteTask} = createTaskActions(sendMessage);
     const { getTask,handleAddTask, handleAlertTask, handleRemoveTask } = ApiTask();

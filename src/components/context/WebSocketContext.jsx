@@ -1,11 +1,10 @@
-import React, { useRef, useCallback, useState, useEffect} from 'react';
-import { WebSocketContext } from './ContextForWeb';
-
+import React, {useRef, useCallback, useState, useEffect, useReducer} from 'react';
 import {ApiTask} from "@/utils/ApiTask.jsx";
-
+import { reducerSocket, WebSocketContext, initialState } from './reducer/reducerSocket.jsx';
 
 export const WebSocketProvider = ({ children }) => {
   const ws = useRef(null);
+  const [state, dispatch] = useReducer(reducerSocket, initialState);
   const [isConnected, setIsConnected] = useState(false);
   const messageListeners = useRef(new Set());
   const isInitialized = useRef(false);
@@ -28,12 +27,16 @@ export const WebSocketProvider = ({ children }) => {
     isInitialized.current = true;
     ws.current = new WebSocket('ws://localhost:5000');
 
-    ws.current.onopen = () => {
+    ws.current.onopen = async () => {
       console.log('WebSocket connected');
       setIsConnected(true);
-
+        const tasks = await getTask();
+        dispatch({
+            type: 'CREATE_TASK_TASK_SUCCESS',
+            payload: tasks,
+        })
     };
-
+    console.log(state.WebTask);
     ws.current.onclose = () => {
       console.log('WebSocket disconnected');
       setIsConnected(false);
@@ -43,36 +46,34 @@ export const WebSocketProvider = ({ children }) => {
         try {
             const message = JSON.parse(event.data);
             console.log("WebSocket сообщение:", message);
-
-            if (message.type === 'TASKS_UPDATED') {
                 const tasks = await getTask();
+                console.log('Dimasik  ',tasks);
+                dispatch({
+                    type: 'CREATE_TASK_TASK_SUCCESS',
+                    payload: tasks,
+                })
                 messageListeners.current.forEach(listener => {
                     listener(tasks);
                 });
-            } else if (message.type === 'NEW_TASK') {
-                messageListeners.current.forEach(listener => {
-                    listener(message.data);
-                });
-            }
+
 
         } catch (error) {
             console.error('WebSocket message parsing error:', error, event.data);
         }
     };
-
+    console.log('WebSocket disconnected', state.WebTask);
     ws.current.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
   }, []);
 
-  const value = {
-    sendMessage,
-    addMessageListener,
-    isConnected
-  };
-
   return (
-    <WebSocketContext.Provider value={value}>
+    <WebSocketContext.Provider value={{
+        WebSocketTask: state.WebTask,
+        sendMessage,
+        addMessageListener,
+        isConnected
+    }}>
       {children}
     </WebSocketContext.Provider>
   );

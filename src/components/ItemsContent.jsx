@@ -7,11 +7,12 @@ import  CheckMark  from '../assets/Check-Mark.svg';
 import './itemsContent.scss';
 import InputItem from "./InputItem";
 import {useContextTask} from "./context/reducer/reducerCT";
-
+import {useWebSocketContext} from "@/components/context/reducer/reducerSocket.jsx";
 
 
 export default function ItemsContent() {
     const {  task, getTasks, handleRemove, handleAlert} = useContextTask();
+    const {WebSocketTask} = useWebSocketContext();
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({
         task_desc: '',
@@ -19,11 +20,10 @@ export default function ItemsContent() {
     });
 
 
-    useEffect(() => {
-        getTasks()
-        console.log(task)
-    },[]);
-
+    // useEffect(() => {
+    //     getTasks()
+    //     console.log(task)
+    // },[]);
 
     const handleEditTask = (item) =>{
       setEditingId(item.id_task);
@@ -44,6 +44,7 @@ export default function ItemsContent() {
     }
 
   return (
+
     <table className="ItemsContent">
         <thead className="ItemsContent__rw">
             <tr className='ItemsContent__rw-headers'>
@@ -53,7 +54,7 @@ export default function ItemsContent() {
             </tr>
         </thead>
         <tbody>
-        {task.map(item => (
+        {WebSocketTask.map(item => (
                 <tr className='ItemsContent__rw-items' key={item.id_task}>
                     <th className='ItemsContent__rw-items__task'>
                       {editingId === item.id_task ? (
