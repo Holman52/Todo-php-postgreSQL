@@ -1,4 +1,4 @@
-import  {  useReducer,  useState, useEffect, useContext} from 'react';
+import  {  useReducer,  useState, useEffect} from 'react';
 import { reducer, ContextTask, initialState } from './reducer/reducerCT';
 import {ApiTask} from "@/utils/ApiTask.jsx";
 import {createTaskActions} from "@/utils/SocketMessageAction.js";
@@ -23,15 +23,9 @@ export const ItemsProvider = ({ children }) => {
 
     const  getTasks = () => {
         try {
-            getTask()
-                .then(result => {
-                    console.log(result);
-                    dispatch({
-                        type: "GET_TASKS",
-                        payload: result
-                    })
-                    getAllTasks(result)
-                })
+            let res = getTask()
+            getAllTasks(res)
+
         } catch (e) {
             console.log(e);
         }
@@ -47,9 +41,9 @@ export const ItemsProvider = ({ children }) => {
         }
 
     };
-    const handlerAlert = (id, desc, id_importance) => {
+    const handlerAlert = async (id, desc, id_importance) => {
         try {
-             handleAlertTask(id, desc, id_importance)
+            await handleAlertTask(id, desc, id_importance)
             updateTask(id, desc, id_importance)
                 }
          catch (e) {
@@ -58,14 +52,9 @@ export const ItemsProvider = ({ children }) => {
 
     };
 
-    const handlerDelete = (taskId) => {
+    const handlerDelete = async (taskId) => {
         try {
-            handleRemoveTask(taskId).then(result => {
-                    dispatch({
-                        type: "GET_TASKS",
-                        payload: result
-                    })
-            })
+            await handleRemoveTask(taskId)
             deleteTask(taskId)
         } catch (e) {
             console.log(e.message)

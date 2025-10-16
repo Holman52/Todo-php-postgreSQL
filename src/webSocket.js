@@ -10,6 +10,9 @@ wss.on('connection', function(ws){
     ws.on('message' , (message) =>{
         const content = JSON.parse(message)
         switch (content.type) {
+            case 'TASKS_LIST':
+                broadcast((content))
+                break;
             case 'TASK_CREATED':
                 broadcast(content)
                 break;
