@@ -32,43 +32,41 @@ export const ItemsProvider = ({ children }) => {
                     })
                     getAllTasks(result)
                 })
-        } catch (error) {
-            console.error(error.message);
+        } catch (e) {
+            console.log(e);
         }
     }
     const handlerAdd = (taskData) => {
         try {
-            handleAddTask(taskData).then(result => {
-                dispatch({
-                    type: "GET_TASKS",
-                    payload: result
-                })
-            })
+            handleAddTask(taskData)
             console.log("1111",taskData);
 
             createTask(taskData);
-        } catch (error) {
-            console.error(error.message);
+        } catch (e){
+            console.log(e);
         }
 
     };
     const handlerAlert = (id, desc, id_importance) => {
         try {
-            const result = handleAlertTask(id, desc, id_importance);
+             handleAlertTask(id, desc, id_importance)
             updateTask(id, desc, id_importance)
-            return  result
-        } catch (e) {
-            console.log(e.message)
+                }
+         catch (e) {
+            console.log(e);
         }
 
     };
 
     const handlerDelete = (taskId) => {
         try {
-            const result = handleRemoveTask(taskId);
-            deleteTask(taskId);
-            return  result
-
+            handleRemoveTask(taskId).then(result => {
+                    dispatch({
+                        type: "GET_TASKS",
+                        payload: result
+                    })
+            })
+            deleteTask(taskId)
         } catch (e) {
             console.log(e.message)
 

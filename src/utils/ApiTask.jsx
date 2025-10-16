@@ -30,6 +30,7 @@ export const ApiTask = () => {
              }
              console.log("result add",result);
              return  result;
+
          }
          catch (error){
              console.log(error)
@@ -48,17 +49,8 @@ export const ApiTask = () => {
             if (!response.ok) {
                 throw new Error('Ошибка при отправке формы');
             }
-            dispatch({
-                type: "UPDATE_TASK",
-                payload: {
-                    id: id,
-                    desc: desc,
-                    importance: id_importance
-                }
-            });
-            console.log(state)
-
-            console.log('Alerted to completed')
+            const result = await response.json();
+            return result;
 
         }catch (err){
             console.log(err.message)
@@ -72,11 +64,10 @@ export const ApiTask = () => {
                 method: 'DELETE',
                 body: JSON.stringify({ id }),
             });
-            dispatch({
-                type: "REMOVE_TASK",
-                payload: id
-            })
             console.log('Delete response:', response.data);
+            const result = await response.json();
+            console.log('delete',result);
+            return result;
         } catch (err) {
             console.log(err.message);
             alert('Failed to delete item');

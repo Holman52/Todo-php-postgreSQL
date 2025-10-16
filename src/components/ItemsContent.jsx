@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import React from "react";
 import  Delete  from '../assets/Remove.svg';
 import  Edit  from '../assets/Edit.svg';
@@ -11,7 +11,7 @@ import {useWebSocketContext} from "@/components/context/reducer/reducerSocket.js
 
 
 export default function ItemsContent() {
-    const {  task, getTasks, handleRemove, handleAlert} = useContextTask();
+    const {  handlerDelete, handlerAlert} = useContextTask();
     const {WebSocketTask} = useWebSocketContext();
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({
@@ -55,7 +55,7 @@ export default function ItemsContent() {
         </thead>
         <tbody>
         {WebSocketTask.map(item => (
-                <tr className='ItemsContent__rw-items' key={item.id_task}>
+                <tr className='ItemsContent__rw-items' tabIndex={item.id_task} key={item.id_task}>
                     <th className='ItemsContent__rw-items__task'>
                       {editingId === item.id_task ? (
                                 <InputItem
@@ -88,7 +88,7 @@ export default function ItemsContent() {
                         {editingId === item.id_task ? (
                           <React.Fragment>
                              <img 
-                                onClick={() =>{handleAlert(item.id_task,editForm.task_desc,editForm.id_importance); setEditingId(null)}}
+                                onClick={() =>{handlerAlert(item.id_task,editForm.task_desc,editForm.id_importance); setEditingId(null)}}
                                 className="govno-cvg" src={CheckMark} alt="edit" 
                                 // width="30" height="30" 
                               />
@@ -106,8 +106,9 @@ export default function ItemsContent() {
                               className="govno-cvg" src={Edit} alt="edit" 
                               width="30" height="30" 
                             />
+
                             <img 
-                              onClick={() => handleRemove(item.id_task)} 
+                              onClick={() => handlerDelete(item.id_task)}
                               className="govno-cvg" src={Delete} alt="delete" 
                               width="30" height="30"
                             />

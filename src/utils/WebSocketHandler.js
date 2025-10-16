@@ -11,11 +11,11 @@ export const createWebSocketHandlers = (dispatch) => ({
                 dispatch({ type: 'ADD_TASK', payload: message.data });
                 break;
 
-            case 'TASK_UPDATED':
+            case 'UPDATE_TASK':
                 dispatch({ type: 'UPDATE_TASK', payload: message.data });
                 break;
 
-            case 'TASK_DELETED':
+            case 'DELETE_TASK':
                 dispatch({ type: 'DELETE_TASK', payload: message.data.id });
                 break;
 

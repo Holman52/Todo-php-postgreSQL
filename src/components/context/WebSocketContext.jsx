@@ -21,7 +21,6 @@ export const WebSocketProvider = ({ children }) => {
     messageListeners.current.add(listener);
     return () => messageListeners.current.delete(listener);
   }, []);
-
   useEffect(() => {
     if (isInitialized.current) return;
     isInitialized.current = true;

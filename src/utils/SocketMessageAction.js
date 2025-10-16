@@ -14,7 +14,7 @@ export const createTaskActions = (sendMessage) => ({
 
     updateTask: (taskId, desc,id_importance) => {
         sendMessage({
-            type: 'UPDATE_TASK',
+            type: 'TASK_UPDATED',
             data: { id:taskId,
                 desc: desc,
                 importance: id_importance }
@@ -23,7 +23,7 @@ export const createTaskActions = (sendMessage) => ({
 
     deleteTask: (taskId) => {
         sendMessage({
-            type: 'DELETE_TASK',
+            type: 'TASK_DELETED',
             data: { id: taskId }
         });
     },
